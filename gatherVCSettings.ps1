@@ -16,7 +16,7 @@
 #   2023/xx/xx: 新規作成
 
 # 接続先vCenter情報
-$vCenterServer = "vcsa.vmarare.local"
+$vCenterServer = "vcsa.vmware.local"
 $vCenterSSOUser = "Administrator@vsphere.local"
 $vCenterSSOPassword = "P@ssw0rd!"
 
@@ -225,11 +225,11 @@ $vc_advcfg
 
 # [<vCenter>]-[アラーム定義]
 writeLog "----------------------------------------------------------------"
-writeLog "scheduled task"
+writeLog "alarm definition"
 writeLog "--------------------------------"
-writeLog "script: $($modulePath)\vc_scheduletask.ps1"
-$vc_scheduletask = . "$($modulePath)\vc_scheduletask.ps1"
-$vc_scheduletask
+writeLog "script: $($modulePath)\vc_alarm.ps1"
+$vc_alarm = . "$($modulePath)\vc_alarm.ps1"
+$vc_alarm
 
 # [<vCenter>]-[スケジュール設定タスク]
 # SchedulerとActionが出てこない★
@@ -333,7 +333,7 @@ writeLog "roles"
 writeLog "--------------------------------"
 writeLog "script: $($modulePath)\vc_roles.ps1"
 $vc_roles = . "$($modulePath)\vc_roles.ps1"
-$vc_roles
+$vc_roles | Out-Default
 
 # [管理]-[アクセスコントロール]-[グローバル権限]
 writeLog "----------------------------------------------------------------"
@@ -341,7 +341,7 @@ writeLog "permissions"
 writeLog "--------------------------------"
 writeLog "script: $($modulePath)\vc_permissions.ps1"
 $vc_permissions = . "$($modulePath)\vc_permissions.ps1"
-$vc_permissions
+$vc_permissions | Out-Default
 
 
 # [管理]-[ライセンス]-[ライセンス]
@@ -350,10 +350,12 @@ writeLog "License info"
 writeLog "--------------------------------"
 writeLog "script: $($modulePath)\vc_license.ps1"
 $vc_license = . "$($modulePath)\vc_license.ps1"
-$vc_license
+$vc_license | Out-Default
 
 # Datacenter単位でループ
-Get-Datacenter | Sort-Object -Property Name
+writeLog "----------------------------------------------------------------"
+writeLog "Datacenters:"
+Get-Datacenter | Sort-Object -Property Name | Out-Default
 Get-Datacenter | Sort-Object -Property Name | ForEach-Object {
     $vc_datacenter = $_.Name
     writeLog "----------------------------------------------------------------"
@@ -362,7 +364,9 @@ Get-Datacenter | Sort-Object -Property Name | ForEach-Object {
     # [<vCenter>]-[<Datacenter>]-[ネットワークプロトコルプロファイル]
 
     # Cluster単位でループ
-    Get-Cluster | Sort-Object -Property Name
+    writeLog "----------------------------------------------------------------"
+    writeLog "Clusters:"
+    Get-Cluster | Sort-Object -Property Name | Out-Default
     Get-Cluster | Sort-Object -Property Name | ForEach-Object {
         $vc_cluster = $_.Name
         writeLog "----------------------------------------------------------------"
@@ -386,7 +390,7 @@ Get-Datacenter | Sort-Object -Property Name | ForEach-Object {
         writeLog "--------------------------------"
         writeLog "script: $($modulePath)\vc_ha.ps1 $($vc_datacenter) $($vc_cluster)"
         $vc_ha = . "$($modulePath)\vc_ha.ps1" $vc_datacenter $vc_cluster
-        $vc_ha
+        $vc_ha | Out-Default
 
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[クイックスタート]→パラメーターではないため対応しない
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[全般]-[スワップ ファイルの場所]★

@@ -5,7 +5,7 @@
 #
 
 # 出力先ファイル名
-$vmOverrideCsvFile = $csvDir + "\" + $vc.Name + "_version.csv"
+$vmOverrideCsvFile = $csvDir + "\" + $vc.Name + "_override.csv"
 writeLog "--------------------------------"
 writeLog "output_file: $vmOverrideCsvFile"
 writeLog "--------------------------------"

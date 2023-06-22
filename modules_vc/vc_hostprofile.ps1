@@ -7,7 +7,7 @@
 # 出力先ファイル名
 $hostprofileCsvFile = $csvDir + "\" + $vc.Name + "_hostprofile.csv"
 writeLog "--------------------------------"
-writeLog "output_file: $customspecCsvFile"
+writeLog "output_file:$hostprofileCsvFile"
 writeLog "--------------------------------"
 
 $hostprofile = Get-VMHostProfile
