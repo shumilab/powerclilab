@@ -4,44 +4,48 @@
 # ・ExtensionDataなど必要なものがあったら個別に採取する方針
 #
 
-# ユーザー一覧
-$usersCsvFile = $csvDir + "\" + $vc.Name + "_sso_users.csv"
-writeLog "--------------------------------"
-writeLog "output_file: $usersCsvFile"
-writeLog "--------------------------------"
+Get-IdentitySource | ForEach-Object {
+    $ssoDomain = $_.Name
+    
+    # ユーザー一覧
+    $ssoUsersCsvFile = $csvDir + "\" + $vc.Name + "_sso_" + $ssoDomain + "_users.csv"
+    writeLog "--------------------------------"
+    writeLog "output_file: $ssoUsersCsvFile"
+    writeLog "--------------------------------"
 
-$users = Get-SsoPersonUser
-$users
-$users | Export-Csv -Path $usersCsvFile
+    $ssoUsers = Get-SsoPersonUser -Domain $ssoDomain
+    $ssoUsers
+    $ssoUsers | Export-Csv -Path $ssoUsersCsvFile
 
-# グループ一覧
-$groupsCsvFile = $csvDir + "\" + $vc.Name + "_sso_groups.csv"
-writeLog "--------------------------------"
-writeLog "output_file: $groupsCsvFile"
-writeLog "--------------------------------"
+    # グループ一覧
+    $ssoGroupsCsvFile = $csvDir + "\" + $vc.Name + "_sso_" + $ssoDomain + "_groups.csv"
+    writeLog "--------------------------------"
+    writeLog "output_file: $ssoGroupsCsvFile"
+    writeLog "--------------------------------"
 
-$groups = Get-SsoGroup
-$groups
-$groups | Export-Csv -Path $groupsCsvFile
+    $ssoGroups = Get-SsoGroup -Domain $ssoDomain
+    $ssoGroups
+    $ssoGroups | Export-Csv -Path $ssoGroupsCsvFile
 
-# グループ所属ユーザー一覧
-$membersCsvFile = $csvDir + "\" + $vc.Name + "_sso_group_members.csv"
-writeLog "--------------------------------"
-writeLog "output_file: $membersCsvFile"
-writeLog "--------------------------------"
+    # グループ所属ユーザー一覧
+    $ssoMembersCsvFile = $csvDir + "\" + $vc.Name + "_sso_" + $ssoDomain  + "_group_members.csv"
+    writeLog "--------------------------------"
+    writeLog "output_file: $ssoMembersCsvFile"
+    writeLog "--------------------------------"
 
-$memberArray = @()
-Get-SsoGroup | ForEach-Object {
-    $groupName = $_.Name
+    $ssoMemberArray = @()
+    Get-SsoGroup | ForEach-Object {
+        $groupName = $_.Name
 
-    Get-SsoGroup -Name $_.Name | Get-SsoPersonUser | ForEach-Object {
-        $memberObject = New-Object PSObject | Select-Object GroupName, UserName
-        $memberObject.GroupName = $groupName
-        $memberObject.UserName = $_
-        $memberArray += $memberObject
+        Get-SsoGroup -Name $_.Name  -Domain $ssoDomain | Get-SsoPersonUser | ForEach-Object {
+            $ssoMemberObject = New-Object PSObject | Select-Object GroupName, UserName
+            $ssoMemberObject.GroupName = $groupName
+            $ssoMemberObject.UserName = $_
+            $ssoMemberArray += $ssoMemberObject
+        }
     }
-}
 
-$memberArray
-$memberArray | Export-Csv -Path $membersCsvFile
+    $ssoMemberArray
+    $ssoMemberArray | Export-Csv -Path $ssoMembersCsvFile
+}
 

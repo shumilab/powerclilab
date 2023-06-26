@@ -12,7 +12,7 @@ writeLog "--------------------------------"
 
 $idProviders = Get-IdentitySource
 $idProviders
-$idProviders | Export-Csv -Path $usersCsvFile
+$idProviders | Export-Csv -Path $idProvidersCsvFile
 
 # [ローカルアカウント]-[パスワードポリシー]
 $passwordPolicyCsvFile = $csvDir + "\" + $vc.Name + "_sso_passwordpolicy.csv"
@@ -22,7 +22,7 @@ writeLog "--------------------------------"
 
 $passwordPolicy = Get-SsoPasswordPolicy
 $passwordPolicy
-$passwordPolicy | Export-Csv -Path $usersCsvFile
+$passwordPolicy | Export-Csv -Path $passwordPolicyCsvFile
 
 # [ローカルアカウント]-[ロックアウト ポリシー]
 $lockoutPolicyCsvFile = $csvDir + "\" + $vc.Name + "_sso_lockoutpolicy.csv"
@@ -32,7 +32,7 @@ writeLog "--------------------------------"
 
 $lockoutPolicy = Get-SsoLockoutPolicy
 $lockoutPolicy
-$lockoutPolicy | Export-Csv -Path $usersCsvFile
+$lockoutPolicy | Export-Csv -Path $lockoutPolicyCsvFile
 
 # [ローカルアカウント]-[トークンの信頼性]
 $tokenCsvFile = $csvDir + "\" + $vc.Name + "_sso_tokenlifetime.csv"
@@ -42,5 +42,5 @@ writeLog "--------------------------------"
 
 $token = Get-SsoTokenLifetime
 $token
-$token | Export-Csv -Path $usersCsvFile
+$token | Export-Csv -Path $tokenCsvFile
 
