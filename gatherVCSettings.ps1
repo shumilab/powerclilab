@@ -16,9 +16,9 @@
 #   2023/xx/xx: 新規作成
 
 # 接続先vCenter情報
-$vCenterServer = "vcsa.vmware.local"
+$vCenterServer = "vcsa221.adm.intra.local"
 $vCenterSSOUser = "Administrator@vsphere.local"
-$vCenterSSOPassword = "P@ssw0rd!"
+$vCenterSSOPassword = "255Delta!"
 
 # 収集スクリプトパス
 $modulePath = ".\modules_vc"
@@ -393,8 +393,13 @@ Get-Datacenter | Sort-Object -Property Name | ForEach-Object {
         $vc_ha | Out-Default
 
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[クイックスタート]→パラメーターではないため対応しない
-        # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[全般]-[スワップ ファイルの場所]★
-
+        # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[全般]-[スワップ ファイルの場所]
+        writeLog "--------------------------------"
+        writeLog "VmSwapPlacement"
+        writeLog "--------------------------------"
+        writeLog "script: $($modulePath)\vc_vmswapplacement.ps1 $($vc_datacenter) $($vc_cluster)"
+        $vc_vmswapplacement = . "$($modulePath)\vc_vmswapplacement.ps1" $vc_datacenter $vc_cluster
+        $vc_vmswapplacement
 
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[全般]-[仮想マシンのデフォルトの互換性]★
 

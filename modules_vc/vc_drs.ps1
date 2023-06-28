@@ -7,6 +7,20 @@
 $ha_datacenter = $args[0]
 $ha_cluster = $args[1]
 
+# [vSphere DRS]-[電源管理]
+$drs_DpmCsvFile = $csvDir + "\" + $vc.Name + "_" + $ha_datacenter  + "_" + $ha_cluster + "_drs_dpm.csv"
+$drs_DpmHostConfigCsvFile = $csvDir + "\" + $vc.Name + "_" + $ha_datacenter  + "_" + $ha_cluster + "_drs_dpmHostConfig.csv"
+
+$clusterView = Get-Cluster $ha_cluster | Get-View
+$drs_Dpm = $clusterView.ConfigurationEx.DpmConfigInfo
+$drs_DpmHostConfig = $cluster.ConfigurationEx.DpmHostConfig
+
+$drs_Dpm
+$drs_Dpm | Export-Csv -Path $drs_DpmCsvFile
+
+$drs_dpmHostConfig
+$drs_dpmHostConfig | Export-Csv -Path $drs_DpmHostConfigCsvFile
+
 # DrsClusterGroup
 $drs_DrsClusterGroupCsvFile = $csvDir + "\" + $vc.Name + "_" + $ha_datacenter  + "_" + $ha_cluster + "_drs_drsclustergroup.csv"
 writeLog "--------------------------------"
