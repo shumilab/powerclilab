@@ -11,13 +11,15 @@ $esxi = $args[0]
 $vssCsvFile = $csvDir + "\" + $esxi + "_virtualSwitch.csv"
 $vssSecucityPolicyCsvFile = $csvDir + "\" + $esxi + "_virtualSwitchSecucityPolicy.csv"
 $vssNicTeamingPolicyCsvFile = $csvDir + "\" + $esxi + "_virtualSwitchNicTeamingPolicy.csv"
-$vssLinkDetectionCsvFile = $csvDir + "\" + $esxi + "_virtualSwitchLinkDetection.csv"
 $vssTraficShapingCsvFile = $csvDir + "\" + $esxi + "_virtualSwitchTraficShapings.csv"
 
 $vssPortGroupCsvFile = $csvDir + "\" + $esxi + "_virtualSwitchPortGroups.csv"
 $vssPortGroupTraficShapingCsvFile = $csvDir + "\" + $esxi + "_virtualSwitchPortGroupTraficShapings.csv"
 $vssPortGroupSecurityPolicyCsvFile = $csvDir + "\" + $esxi + "_virtualSwitchPortGroupSecurityPolicy.csv"
 $vssPortGroupLoadBalancingCsvFile = $csvDir + "\" + $esxi + "_virtualSwitchPortGroupLoadBalancing.csv"
+
+$vssPhysicalNicsCsvFile = $csvDir + "\" + $esxi + "_virtualSwitchPhysicalNics.csv"
+$vssPhysicalNicDetailsCsvFile = $csvDir + "\" + $esxi + "_virtualSwitchPhysicalNicDetails.csv"
 
 $vssLinkDetectionCsvFile = $csvDir + "\" + $esxi + "_virtualSwitchLinkDetections.csv"
 
@@ -118,6 +120,9 @@ $vssLinkDetections
 
 # 物理NIC
 $vssPhysicalNics = $esxcli.network.nic.list()
+$vssPhysicalNics
+
+$vssPhysicalNicDetails = $vssPhysicalNics | ForEach-Object { $esxcli.network.nic.get($_.Name) }
 
 # csvファイル出力
 $vssList | Export-Csv -Path $vssCsvFile
@@ -144,6 +149,10 @@ $vssNicTeamingPolicies | Select-Object `
     UnusedNicJoin | Export-Csv -Path $vssNicTeamingPolicyCsvFile
 
 $vssLinkDetections | Export-Csv -Path $vssLinkDetectionCsvFile
+
+$vssPhysicalNics | Export-Csv -Path $vssPhysicalNicsCsvFile
+
+$vssPhysicalNicDetails | Export-Csv -Path $vssPhysicalNicDetailsCsvFile
 
 $vssTraficShapings | Export-Csv -Path $vssTraficShapingCsvFile
 
