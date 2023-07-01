@@ -433,6 +433,8 @@ Get-Datacenter | Sort-Object -Property Name | ForEach-Object {
     }
 }
 
+# vDS設定★
+
 # 切断
 Disconnect-VIServer -Server $vCenterServer -Confirm:$false 
 Disconnect-SsoAdminServer
