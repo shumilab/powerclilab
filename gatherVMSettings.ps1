@@ -107,6 +107,14 @@ writeLog "script: $($modulePath)\vm_getVM.ps1"
 $vm_getVM = . "$($modulePath)\vm_getVM.ps1"
 $vm_getVM | ft
 
+# 仮想マシン一覧(内部)
+writeLog "----------------------------------------------------------------"
+writeLog "Get-VMGuest"
+writeLog "--------------------------------"
+writeLog "script: $($modulePath)\vm_getVMGuest.ps1"
+$vm_getVMGuest = . "$($modulePath)\vm_getVMGuest.ps1"
+$vm_getVMGuest | Select-Object VM, GuestFamily, HostName, OSFullName, State | ft
+
 # 仮想マシンHW詳細設定
 writeLog "----------------------------------------------------------------"
 writeLog "Get-VMExtraConfig"
@@ -114,14 +122,6 @@ writeLog "--------------------------------"
 writeLog "script: $($modulePath)\vm_getVMExtraConfig.ps1"
 $vm_getvm_getVMExtraConfig = . "$($modulePath)\vm_getVMExtraConfig.ps1"
 $vm_getvm_getVMExtraConfig | ft
-
-# 仮想マシン一覧(内部)
-writeLog "----------------------------------------------------------------"
-writeLog "Get-VMGuest"
-writeLog "--------------------------------"
-writeLog "script: $($modulePath)\vm_getVMGuest.ps1"
-$vm_getVMGuest = . "$($modulePath)\vm_getVMGuest.ps1"
-$vm_getVMGuest | ft
 
 # 仮想マシンハードディスク情報
 writeLog "----------------------------------------------------------------"
@@ -139,14 +139,6 @@ writeLog "script: $($modulePath)\vm_getVMDiskUsage.ps1"
 $vm_getVMDiskUsage = . "$($modulePath)\vm_getVMDiskUsage.ps1"
 $vm_getVMDiskUsage | ft
 
-# 仮想マシンNIC情報
-writeLog "----------------------------------------------------------------"
-writeLog "Get-VMDiskUsage"
-writeLog "--------------------------------"
-writeLog "script: $($modulePath)\vm_getNetworkAdapter.ps1"
-$vm_getNetworkAdapter = . "$($modulePath)\vm_getNetworkAdapter.ps1"
-$vm_getNetworkAdapter
-
 # 仮想マシンが接続するCD/DVD情報
 writeLog "----------------------------------------------------------------"
 writeLog "Get-VMCDDVD"
@@ -154,6 +146,14 @@ writeLog "--------------------------------"
 writeLog "script: $($modulePath)\vm_getVMCDDVD.ps1"
 $vm_getvm_getVMCDDVD = . "$($modulePath)\vm_getVMCDDVD.ps1"
 $vm_getvm_getVMCDDVD | Select-Object Parent, ConnectionState, IsoPath, HostDevice, RemoteDevice | ft
+
+# 仮想マシンNIC情報
+writeLog "----------------------------------------------------------------"
+writeLog "Get-NetworkAdapter"
+writeLog "--------------------------------"
+writeLog "script: $($modulePath)\vm_getNetworkAdapter.ps1"
+$vm_getNetworkAdapter = . "$($modulePath)\vm_getNetworkAdapter.ps1"
+$vm_getNetworkAdapter | Select-Object Parent, Name, Type, NetworkName, MacAddress | ft
 
 # 仮想マシンvNICとポートグループとIPアドレス設定
 writeLog "----------------------------------------------------------------"
