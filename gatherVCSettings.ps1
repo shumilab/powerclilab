@@ -13,12 +13,12 @@
 #     ・$vCenterSSOPassword: $vCenterSSOUserのパスワード
 #
 # ・ChangeLog:
-#   2023/xx/xx: 新規作成
+#   2023/06/23: 接続先の設定は別ファイルにした
+#   2023/06/15: 新規作成
+#
 
-# 接続先vCenter情報
-$vCenterServer = "vcsa221.adm.intra.local"
-$vCenterSSOUser = "Administrator@vsphere.local"
-$vCenterSSOPassword = "255Delta!"
+# 接続先vCenter情報ファイル
+$envLogin = ".\envLogin.ps1"
 
 # 収集スクリプトパス
 $modulePath = ".\modules_vc"
@@ -41,7 +41,6 @@ function writeLog([String]$writeLogMessage){
     (Get-Date -Format "yyyy/MM/dd HH:mm:ss") + ": " + $writeLogMessage
 }
 
-
 function startLog {
     writeLog "================================================================"
     writeLog "start - $scriptName"
@@ -55,11 +54,18 @@ function endLog($endLogResultCode) {
     writeLog "================================================================"
 }
 
+# 接続先設定用ファイル読み込み
+. $envLogin
+if ($? -eq $false) {
+    Write-Host "loading $($envLogin) failed"
+    Write-Host "exit 1"
+    exit 1
+}
 
 # ログフォルダが無ければ実行フォルダ直下に作成
-if ((Test-Path $logDir) -eq $False) {
+if ((Test-Path $logDir) -eq $false) {
     New-Item -ItemType Directory $logDir
-    if ($? -eq $False) { 
+    if ($? -eq $false) { 
         Write-Host "cannot make: $logDir"
         Write-Host "exit 1"
         exit 1
@@ -67,9 +73,9 @@ if ((Test-Path $logDir) -eq $False) {
 }
 
 # csv出力先フォルダが無ければ実行フォルダ直下に作成
-if ((Test-Path $csvDir) -eq $False) {
+if ((Test-Path $csvDir) -eq $false) {
     New-Item -ItemType Directory $csvDir
-    if ($? -eq $False) { 
+    if ($? -eq $false) { 
         Write-Host "cannot make: $csvDir"
         Write-Host "exit 1"
         exit 1
@@ -252,7 +258,7 @@ $vc_schedule
 # [管理]-[デプロイ]-[システム設定]★
 
 # [管理]-[デプロイ]-[カスタマ エクスペリエンス向上プログラム]
-# VirtualCenter.DataCollector.ConsentDataのconsentAcceptedが$true/false？★
+# VirtualCenter.DataCollector.ConsentDataのconsentAcceptedが$true/$false？★
 
 
 # [管理]-[デプロイ]-[クライアント構成]★

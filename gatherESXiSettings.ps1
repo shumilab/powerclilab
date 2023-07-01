@@ -1,17 +1,16 @@
 ﻿#
 # ◆gatherESXiSettings.ps1
-# Description:
-# ・vCenterに接続してデータセンターにいるESXi全台の設定情報を採取する
+# ・Description:
+#   ・vCenterに接続してデータセンターにいるESXi全台の設定情報を採取する
+#   ・実行前に$envLoginに指定したファイルへ接続先vCenter情報を設定必要
 #
+# ・ChangeLog:
+#   2023/07/01: 接続先の設定は別ファイルにした
+#   2023/06/15: 新規作成
 #
-#
-# TODO:
-# ・エラー処理どうしようね？
 
-# 接続先vCenter情報
-$vCenterServer = "vcsa.vmware.local"
-$vCenterSSOUser = "Administrator@vsphere.local"
-$vCenterSSOPassword = "P@ssw0rd!"
+# 接続先vCenter情報ファイル
+$envLogin = ".\envLogin.ps1"
 
 # 収集スクリプトパス
 $modulePath = ".\modules_esxi"
@@ -34,7 +33,6 @@ function writeLog([String]$writeLogMessage){
     (Get-Date -Format "yyyy/MM/dd HH:mm:ss") + ": " + $writeLogMessage
 }
 
-
 function startLog {
     writeLog "================================================================"
     writeLog "start - $scriptName"
@@ -48,11 +46,18 @@ function endLog($endLogResultCode) {
     writeLog "================================================================"
 }
 
+# 接続先設定用ファイル読み込み
+. $envLogin
+if ($? -eq $false) {
+    Write-Host "loading $($envLogin) failed"
+    Write-Host "exit 1"
+    exit 1
+}
 
 # ログフォルダが無ければ実行フォルダ直下に作成
-if ((Test-Path $logDir) -eq $False) {
+if ((Test-Path $logDir) -eq $false) {
     New-Item -ItemType Directory $logDir
-    if ($? -eq $False) { 
+    if ($? -eq $false) { 
         Write-Host "cannot make: $logDir"
         Write-Host "exit 1"
         exit 1
@@ -60,9 +65,9 @@ if ((Test-Path $logDir) -eq $False) {
 }
 
 # csv出力先フォルダが無ければ実行フォルダ直下に作成
-if ((Test-Path $csvDir) -eq $False) {
+if ((Test-Path $csvDir) -eq $false) {
     New-Item -ItemType Directory $csvDir
-    if ($? -eq $False) { 
+    if ($? -eq $false) { 
         Write-Host "cannot make: $csvDir"
         Write-Host "exit 1"
         exit 1
@@ -75,7 +80,7 @@ Start-Transcript -Append -Path $logfile
 
 # vCenter接続
 Connect-VIServer -Server $vCenterServer -User $vCenterSSOUser -Password $vCenterSSOPassword -Force
-if ($? -eq $False) {
+if ($? -eq $false) {
     writeLog "failed: Connect-VIServer" 
     writeLog "abort"
     endLog(1)
