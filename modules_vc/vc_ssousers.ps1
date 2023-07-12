@@ -34,13 +34,22 @@ Get-IdentitySource | ForEach-Object {
     writeLog "--------------------------------"
 
     $ssoMemberArray = @()
-    Get-SsoGroup | ForEach-Object {
+    Get-SsoGroup -Domain $ssoDomain | ForEach-Object {
         $groupName = $_.Name
 
+        # $_.Nameはユーザーの場合もあるしグループの場合もある
+        # $_.Nameがユーザーなのかグループなのか判定した方がよいけどとりあえず取れてそう
         Get-SsoGroup -Name $_.Name  -Domain $ssoDomain | Get-SsoPersonUser | ForEach-Object {
-            $ssoMemberObject = New-Object PSObject | Select-Object GroupName, UserName
+            $ssoMemberObject = New-Object PSObject | Select-Object GroupName, MemberName
             $ssoMemberObject.GroupName = $groupName
-            $ssoMemberObject.UserName = $_
+            $ssoMemberObject.MemberName = $_
+            $ssoMemberArray += $ssoMemberObject
+        }
+
+        Get-SsoGroup -Name $_.Name  -Domain $ssoDomain | Get-SsoGroup | ForEach-Object {
+            $ssoMemberObject = New-Object PSObject | Select-Object GroupName, MemberName
+            $ssoMemberObject.GroupName = $groupName
+            $ssoMemberObject.MemberName = $_
             $ssoMemberArray += $ssoMemberObject
         }
     }

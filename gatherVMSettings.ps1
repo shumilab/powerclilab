@@ -115,6 +115,14 @@ writeLog "script: $($modulePath)\vm_getVMGuest.ps1"
 $vm_getVMGuest = . "$($modulePath)\vm_getVMGuest.ps1"
 $vm_getVMGuest | Select-Object VM, GuestFamily, HostName, OSFullName, State | ft
 
+# 仮想マシンテンプレート一覧
+writeLog "----------------------------------------------------------------"
+writeLog "Get-Template"
+writeLog "--------------------------------"
+writeLog "script: $($modulePath)\vm_getVMTemplate.ps1"
+$vm_getVMTemplate = . "$($modulePath)\vm_getVMTemplate.ps1"
+$vm_getVMTemplate | ft
+
 # 仮想マシンHW詳細設定
 writeLog "----------------------------------------------------------------"
 writeLog "Get-VMExtraConfig"
@@ -122,6 +130,14 @@ writeLog "--------------------------------"
 writeLog "script: $($modulePath)\vm_getVMExtraConfig.ps1"
 $vm_getvm_getVMExtraConfig = . "$($modulePath)\vm_getVMExtraConfig.ps1"
 $vm_getvm_getVMExtraConfig | ft
+
+# 仮想マシンテンプレートHW詳細設定
+writeLog "----------------------------------------------------------------"
+writeLog "Get-VMTemplateExtraConfig"
+writeLog "--------------------------------"
+writeLog "script: $($modulePath)\vm_getVMTemplateExtraConfig.ps1"
+$vm_getvm_getVMTemplateExtraConfig = . "$($modulePath)\vm_getVMTemplateExtraConfig.ps1"
+$vm_getvm_getVMTemplateExtraConfig | ft
 
 # 仮想マシンハードディスク情報
 writeLog "----------------------------------------------------------------"
