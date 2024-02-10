@@ -15,9 +15,15 @@ $clusterView = Get-Cluster $ha_cluster | Get-View
 $drs_Dpm = $clusterView.ConfigurationEx.DpmConfigInfo
 $drs_DpmHostConfig = $cluster.ConfigurationEx.DpmHostConfig
 
+writeLog "--------------------------------"
+writeLog "output_file: $drs_DpmCsvFile"
+writeLog "--------------------------------"
 $drs_Dpm
 $drs_Dpm | Export-Csv -Path $drs_DpmCsvFile
 
+writeLog "--------------------------------"
+writeLog "output_file: $drs_DpmHostConfigCsvFile"
+writeLog "--------------------------------"
 $drs_dpmHostConfig
 $drs_dpmHostConfig | Export-Csv -Path $drs_DpmHostConfigCsvFile
 

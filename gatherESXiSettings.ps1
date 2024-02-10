@@ -104,67 +104,67 @@ $vmhosts | ForEach-Object {
     # ホスト基本情報
     writeLog "----------------"
     writeLog "$($vmhostName): Get-VMHost"
-    writeLog "script: $($modulePath)\esxi_vmhost.ps1"
+    writeLog "script: $($modulePath)\esxi_vmhost.ps1 $($vmhostName)"
     $esxi_vmhost = . "$($modulePath)\esxi_vmhost.ps1" $vmhostName
     $esxi_vmhost
 
     # [ストレージ]-[ストレージアダプタ]
     writeLog "----------------"
     writeLog "$($vmhostName): Storage - Storage adapter"
-    writeLog "script: $($modulePath)\esxi_storageadapter.ps1"
+    writeLog "script: $($modulePath)\esxi_storageadapter.ps1 $($vmhostName)"
     $esxi_storageAdapter = . "$($modulePath)\esxi_storageadapter.ps1" $vmhostName
     $esxi_storageAdapter
 
     # [ストレージ]-[ストレージデバイス]
     writeLog "----------------"
     writeLog "$($vmhostName): Storage - Storage device"
-    writeLog "script: $($modulePath)\esxi_storagedevice.ps1"
+    writeLog "script: $($modulePath)\esxi_storagedevice.ps1 $($vmhostName)"
     $esxi_storageDevice = . "$($modulePath)\esxi_storagedevice.ps1" $vmhostName
     $esxi_storageDevice
 
     # [ストレージ]-[ホスト キャッシュの設定]
     writeLog "----------------"
     writeLog "$($vmhostName): Storage - Host cache settings"
-    writeLog "script: $($modulePath)\esxi_hostcache.ps1"
+    writeLog "script: $($modulePath)\esxi_hostcache.ps1 $($vmhostName)"
     $esxi_hostcache = . "$($modulePath)\esxi_hostcache.ps1" $vmhostName
     $esxi_hostcache
 
     # [ネットワーク]-[仮想スイッチ]
     writeLog "----------------"
     writeLog "$($vmhostName): Network - Virtual Switches"
-    writeLog "script: $($modulePath)\esxi_virtualswitch.ps1"
+    writeLog "script: $($modulePath)\esxi_virtualswitch.ps1 $($vmhostName)"
     $esxi_virtualswitch = . "$($modulePath)\esxi_virtualswitch.ps1" $vmhostName
     $esxi_virtualswitch
 
     # [ネットワーク]-[VMkernelアダプタ]
     writeLog "----------------"
     writeLog "$($vmhostName): Network - VMkernel"
-    writeLog "script: $($modulePath)\esxi_vmkernel.ps1"
+    writeLog "script: $($modulePath)\esxi_vmkernel.ps1 $($vmhostName)"
     $esxi_vmkernel = . "$($modulePath)\esxi_vmkernel.ps1" $vmhostName
     $esxi_vmkernel
 
     # [ネットワーク]-[物理アダプタ]
     writeLog "----------------"
     writeLog "$($vmhostName): Network - physical adapters"
-    writeLog "script: $($modulePath)\esxi_physicaladapter.ps1"
+    writeLog "script: $($modulePath)\esxi_physicaladapter.ps1 $($vmhostName)"
     $esxi_physicaladapter = . "$($modulePath)\esxi_physicaladapter.ps1" $vmhostName
     $esxi_physicaladapter
 
     # [ネットワーク]-[TCP/IP]
     writeLog "----------------"
     writeLog "$($vmhostName): Network - TCP/IP settings"
-    writeLog "script: $($modulePath)\esxi_tcpip.ps1"
+    writeLog "script: $($modulePath)\esxi_tcpip.ps1 $($vmhostName)"
     $esxi_tcpip = . "$($modulePath)\esxi_tcpip.ps1" $vmhostName
     $esxi_tcpip
 
-    # [システム]-[ライセンス]★vCenter側で確認？
+    # [システム]-[ライセンス]→vCenter側で確認
 
     # [システム]-[ホストプロファイル]★不明
 
     # [システム]-[時間の設定]
     writeLog "----------------"
     writeLog "$($vmhostName): Network - time settings"
-    writeLog "script: $($modulePath)\esxi_timecfg.ps1"
+    writeLog "script: $($modulePath)\esxi_timecfg.ps1 $($vmhostName)"
     $esxi_timecfg = . "$($modulePath)\esxi_timecfg.ps1" $vmhostName
     $esxi_timecfg
 
@@ -173,7 +173,7 @@ $vmhosts | ForEach-Object {
     # [システム]-[証明書]
     writeLog "----------------"
     writeLog "$($vmhostName): Network - certificate settings"
-    writeLog "script: $($modulePath)\esxi_certcfg.ps1"
+    writeLog "script: $($modulePath)\esxi_certcfg.ps1 $($vmhostName)"
     $esxi_certcfg = . "$($modulePath)\esxi_certcfg.ps1" $vmhostName
     $esxi_certcfg
 
@@ -182,7 +182,7 @@ $vmhosts | ForEach-Object {
     # [システム]-[システムの詳細設定]
     writeLog "----------------"
     writeLog "$($vmhostName): Network - advanced config"
-    writeLog "script: $($modulePath)\esxi_advcfg.ps1"
+    writeLog "script: $($modulePath)\esxi_advcfg.ps1 $($vmhostName)"
     $esxi_advcfg = . "$($modulePath)\esxi_advcfg.ps1" $vmhostName
     $esxi_advcfg
 
@@ -191,77 +191,77 @@ $vmhosts | ForEach-Object {
     # [システム]-[ファイアウォール]
     writeLog "----------------"
     writeLog "$($vmhostName): System - Firewall"
-    writeLog "script: $($modulePath)\esxi_firewall.ps1"
+    writeLog "script: $($modulePath)\esxi_firewall.ps1 $($vmhostName)"
     $esxi_firewall = . "$($modulePath)\esxi_firewall.ps1" $vmhostName
     $esxi_firewall
 
     # [システム]-[サービス]
     writeLog "----------------"
     writeLog "$($vmhostName): System - Services"
-    writeLog "script: $($modulePath)\esxi_service.ps1"
+    writeLog "script: $($modulePath)\esxi_service.ps1 $($vmhostName)"
     $esxi_service = . "$($modulePath)\esxi_service.ps1" $vmhostName
     $esxi_service
 
     # [システム]-[システム スワップ]
     writeLog "----------------"
     writeLog "$($vmhostName): System - System swap"
-    writeLog "script: $($modulePath)\esxi_swap.ps1"
+    writeLog "script: $($modulePath)\esxi_swap.ps1 $($vmhostName)"
     $esxi_swap = . "$($modulePath)\esxi_swap.ps1" $vmhostName
     $esxi_swap
 
     # [システム]-[パッケージ]
     writeLog "----------------"
     writeLog "$($vmhostName): System - Packages"
-    writeLog "script: $($modulePath)\esxi_package.ps1"
+    writeLog "script: $($modulePath)\esxi_package.ps1 $($vmhostName)"
     $esxi_package = . "$($modulePath)\esxi_package.ps1" $vmhostName
     $esxi_package
 
     # [システム]-[セキュリティプロファイル]
     writeLog "----------------"
     writeLog "$($vmhostName): System - Security profile"
-    writeLog "script: $($modulePath)\esxi_securityprofile.ps1"
+    writeLog "script: $($modulePath)\esxi_securityprofile.ps1 $($vmhostName)"
     $esxi_securityprofile = . "$($modulePath)\esxi_securityprofile.ps1" $vmhostName
     $esxi_securityprofile
 
     # [ハードウェア]-[概要]-[ハイパースレッディング]
     writeLog "----------------"
     writeLog "$($vmhostName): Hardware - Overview - HyperThreading"
-    writeLog "script: $($modulePath)\esxi_hyperthreading.ps1"
+    writeLog "script: $($modulePath)\esxi_hyperthreading.ps1 $($vmhostName)"
     $esxi_hyperthreading = . "$($modulePath)\esxi_hyperthreading.ps1" $vmhostName
     $esxi_hyperthreading
 
     # [ハードウェア]-[概要]-[電力ポリシー]
     writeLog "----------------"
     writeLog "$($vmhostName): Hardware - Overview - Power Management"
-    writeLog "script: $($modulePath)\esxi_powerpolicy.ps1"
+    writeLog "script: $($modulePath)\esxi_powerpolicy.ps1 $($vmhostName)"
     $esxi_powerpolicy = . "$($modulePath)\esxi_powerpolicy.ps1" $vmhostName
     $esxi_powerpolicy
 
     # [ハードウェア]-[グラフィック]
     writeLog "----------------"
     writeLog "$($vmhostName): Hardware - Graphic"
-    writeLog "script: $($modulePath)\esxi_graphic.ps1"
+    writeLog "script: $($modulePath)\esxi_graphic.ps1 $($vmhostName)"
     $esxi_graphic = . "$($modulePath)\esxi_graphic.ps1" $vmhostName
     $esxi_graphic
     
     # [ハードウェア]-[PCI デバイス]-[パススルー対応デバイス]
     writeLog "----------------"
     writeLog "$($vmhostName): Hardware - PCI Device - Passthrough Enabled Devices"
-    writeLog "script: $($modulePath)\esxi_pcipassthru.ps1"
+    writeLog "script: $($modulePath)\esxi_pcipassthru.ps1 $($vmhostName)"
     $esxi_pcipassthru = . "$($modulePath)\esxi_pcipassthru.ps1" $vmhostName
     $esxi_pcipassthru
 
     # [ハードウェア]-[PCI デバイス]-[すべての PCI デバイス]
     writeLog "----------------"
     writeLog "$($vmhostName): Hardware - PCI Device - All PCI Devices"
-    writeLog "script: $($modulePath)\esxi_pcidevice.ps1"
+    writeLog "script: $($modulePath)\esxi_pcidevice.ps1 $($vmhostName)"
     $esxi_pcidevice = . "$($modulePath)\esxi_pcidevice.ps1" $vmhostName
     $esxi_pcidevice
 
     # [仮想フラッシュ]→足りない気がする
     writeLog "----------------"
     writeLog "$($vmhostName): Virtual flash"
-    writeLog "script: $($modulePath)\esxi_virtualflash.ps1"
+    writeLog "script: $($modulePath)\esxi_virtualflash.ps1 $($vmhostName)"
     $esxi_virtualflash = . "$($modulePath)\esxi_virtualflash.ps1" $vmhostName
     $esxi_virtualflash
 
@@ -271,7 +271,7 @@ $vmhosts | ForEach-Object {
     # [仮想マシン]-[仮想マシンの起動およびシャットダウン]
     writeLog "----------------"
     writeLog "$($vmhostName): Virtual machine - Virtual Machine Startup and Shutdown"
-    writeLog "script: $($modulePath)\esxi_vmstartpolicy.ps1"
+    writeLog "script: $($modulePath)\esxi_vmstartpolicy.ps1 $($vmhostName)"
     $esxi_vmstartpolicy = . "$($modulePath)\esxi_vmstartpolicy.ps1" $vmhostName
     $esxi_vmstartpolicy
 
@@ -279,6 +279,13 @@ $vmhosts | ForEach-Object {
     # [仮想マシン]-[仮想マシンのデフォルトの互換性]→クラスタの場合はクラスタで設定って書いてあるので後回し
     # [仮想マシン]-[スワップ ファイルの場所]→クラスタの場合はクラスタで設定って書いてあるので後回し
     
+    writeLog "--------------------------------"
+    writeLog "vSAN disk"
+    writeLog "--------------------------------"
+    writeLog "script: $($modulePath)\esxi_vsan_disk.ps1 $($vmhostName)"
+    $esxi_vsan_disk = . "$($modulePath)\esxi_vsan_disk.ps1" $vmhostName
+    $esxi_vsan_disk
+
 }
 
 # データストア情報

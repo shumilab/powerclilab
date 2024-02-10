@@ -9,10 +9,13 @@
 #   ・実行前に以下設定必要
 #     ・$vCenterServer: vCenter ServerのFQDN
 #     ・$vCenterSSOUser: vCenterへのログインユーザー
-#       →特別な事情がない限り Administrator@vsphere.local でOK
+#       →特別な事情がない限り Administrator@vsphere.local
 #     ・$vCenterSSOPassword: $vCenterSSOUserのパスワード
 #
 # ・ChangeLog:
+#   2023/11/29: vSAN関連の一部コマンドレット追加
+#   2023/11/24: 分散仮想スイッチ、分散ポートグループのコマンドレット追加
+#               →細かいところまでは追えてない
 #   2023/07/01: 接続先の設定は別ファイルにした
 #   2023/06/15: 新規作成
 #
@@ -367,7 +370,7 @@ Get-Datacenter | Sort-Object -Property Name | ForEach-Object {
     writeLog "----------------------------------------------------------------"
     writeLog "Datacenter: $($vc_datacenter)"
 
-    # [<vCenter>]-[<Datacenter>]-[ネットワークプロトコルプロファイル]
+    # [<vCenter>]-[<Datacenter>]-[ネットワークプロトコルプロファイル]★
 
     # Cluster単位でループ
     writeLog "----------------------------------------------------------------"
@@ -396,10 +399,12 @@ Get-Datacenter | Sort-Object -Property Name | ForEach-Object {
         writeLog "--------------------------------"
         writeLog "script: $($modulePath)\vc_ha.ps1 $($vc_datacenter) $($vc_cluster)"
         $vc_ha = . "$($modulePath)\vc_ha.ps1" $vc_datacenter $vc_cluster
-        $vc_ha | Out-Default
+        $vc_ha
 
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[クイックスタート]→パラメーターではないため対応しない
+
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[全般]-[スワップ ファイルの場所]
+        # →現状inheritとしか取れてない
         writeLog "--------------------------------"
         writeLog "VmSwapPlacement"
         writeLog "--------------------------------"
@@ -416,24 +421,108 @@ Get-Datacenter | Sort-Object -Property Name | ForEach-Object {
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[VMware EVC]→EVCモードはGet-Clusterの出力に含まれる
         # →グラフィック モード (vSGA)は？★
 
-
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[仮想マシンのオーバーライド]★
 
 
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[I/Oフィルタ]→当面対応しない
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[ホストオプション]→当面対応しない
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[設定]-[ホストプロファイル]→当面対応しない
-        # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[ライセンス]-[vSANクラスタ]→当面対応しない
-        # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[ライセンス]-[スーパーバイザークラスタ]→当面対応しない
+        # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[ライセンス]-[vSANクラスタ]→ライセンスのところでカバー
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[信頼機関]→当面対応しない
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[アラーム定義]→vCenterで収集
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[スケジュール設定タスク]→vCenterで収集
         # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[vSphereクラスタサービス]-[データストア]→当面対応しない
-        # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[vSAN]-[サービス]→当面対応しない
+        
+        # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[vSAN]-[サービス]
+        writeLog "--------------------------------"
+        writeLog "vSAN cluster configuration"
+        writeLog "--------------------------------"
+        writeLog "script: $($modulePath)\vc_vsan_clusterconfig.ps1 $($vc_datacenter) $($vc_cluster)"
+        $vc_vsan_clusterconfig = . "$($modulePath)\vc_vsan_clusterconfig.ps1" $vc_datacenter $vc_cluster
+        $vc_vsan_clusterconfig | Out-Default
+        
+        # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[vSAN]-[ディスク管理]
+        writeLog "--------------------------------"
+        writeLog "vSAN diskgroup"
+        writeLog "--------------------------------"
+        writeLog "script: $($modulePath)\vc_vsan_diskgroup.ps1 $($vc_datacenter) $($vc_cluster)"
+        $vc_vsan_diskgroup = . "$($modulePath)\vc_vsan_diskgroup.ps1" $vc_datacenter $vc_cluster
+        $vc_vsan_diskgroup
+
+        writeLog "--------------------------------"
+        writeLog "vSAN directdisk"
+        writeLog "--------------------------------"
+        writeLog "script: $($modulePath)\vc_vsan_directdisk.ps1 $($vc_datacenter) $($vc_cluster)"
+        $vc_vsan_directdisk = . "$($modulePath)\vc_vsan_directdisk.ps1" $vc_datacenter $vc_cluster
+        $vc_vsan_directdisk
+
+        writeLog "--------------------------------"
+        writeLog "vSAN space usage"
+        writeLog "--------------------------------"
+        writeLog "script: $($modulePath)\vc_vsan_spaceusage.ps1 $($vc_datacenter) $($vc_cluster)"
+        $vc_vsan_spaceusage = . "$($modulePath)\vc_vsan_spaceusage.ps1" $vc_datacenter $vc_cluster
+        $vc_vsan_spaceusage
+        
+        # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[vSAN]-[フォルトドメイン]
+        writeLog "--------------------------------"
+        writeLog "vSAN fault domain"
+        writeLog "--------------------------------"
+        writeLog "script: $($modulePath)\vc_vsan_faultdomain.ps1 $($vc_datacenter) $($vc_cluster)"
+        $vc_vsan_faultdomain = . "$($modulePath)\vc_vsan_faultdomain.ps1" $vc_datacenter $vc_cluster
+        $vc_vsan_faultdomain
+        
+        # [<vCenter>]-[<Datacenter>]-[<Cluster>]-[vSAN]-[リモートデータストア]
+        # →評価できてないので出力が不明
+        
+        
+        writeLog "--------------------------------"
+        writeLog "vSAN resync component"
+        writeLog "--------------------------------"
+        writeLog "script: $($modulePath)\vc_vsan_resync.ps1 $($vc_datacenter) $($vc_cluster)"
+        $vc_vsan_resync = . "$($modulePath)\vc_vsan_resync.ps1" $vc_datacenter $vc_cluster
+        $vc_vsan_resync | Out-Default
+
+        writeLog "--------------------------------"
+        writeLog "vSAN runtime info"
+        writeLog "--------------------------------"
+        writeLog "script: $($modulePath)\vc_vsan_runtimeinfo.ps1 $($vc_datacenter) $($vc_cluster)"
+        $vc_vsan_runtimeinfo = . "$($modulePath)\vc_vsan_runtimeinfo.ps1" $vc_datacenter $vc_cluster
+        $vc_vsan_runtimeinfo | Out-Default
+
+        writeLog "--------------------------------"
+        writeLog "vSAN PowerState"
+        writeLog "--------------------------------"
+        writeLog "script: $($modulePath)\vc_vsan_powerstate.ps1 $($vc_datacenter) $($vc_cluster)"
+        $vc_vsan_powerstate = . "$($modulePath)\vc_vsan_powerstate.ps1" $vc_datacenter $vc_cluster
+        $vc_vsan_powerstate | Out-Default
+
     }
+
+    # 分散仮想スイッチ設定
+    writeLog "--------------------------------"
+    writeLog "Distrubuted Switch settings"
+    writeLog "--------------------------------"
+    writeLog "script: $($modulePath)\vc_vdswitch.ps1 $($vc_datacenter)"
+    $vc_vdswitch = . "$($modulePath)\vc_vdswitch.ps1" $vc_datacenter
+    $vc_vdswitch
+    
+    # 分散ポートグループ設定
+    writeLog "--------------------------------"
+    writeLog "Distrubuted Port Group settings"
+    writeLog "--------------------------------"
+    writeLog "script: $($modulePath)\vc_vdportgroup.ps1.ps1 $($vc_datacenter)"
+    $vc_vdporgroup = . "$($modulePath)\vc_vdportgroup.ps1" $vc_datacenter
+    $vc_vdporgroup | Out-Default
+
 }
 
-# vDS設定★
+writeLog "--------------------------------"
+writeLog "vSAN disk"
+writeLog "--------------------------------"
+writeLog "script: $($modulePath)\vc_vsan_disk.ps1"
+$vc_vsan_disk = . "$($modulePath)\vc_vsan_disk.ps1"
+$vc_vsan_disk | Out-Default
+
 
 # 切断
 Disconnect-VIServer -Server $vCenterServer -Confirm:$false 

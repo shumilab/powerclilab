@@ -23,7 +23,7 @@ writeLog "--------------------------------"
 writeLog "output_file: $haAdmissionControlCsvFile"
 writeLog "--------------------------------"
 $haAdmissionControl = $ha_cluseter_config.Configuration.DasConfig.AdmissionControlPolicy
-$haAdmissionControl
+$haAdmissionControl | fl
 $haAdmissionControl | Export-Csv -Path $haAdmissionControlCsvFile
 
 # 仮想マシンの監視
@@ -32,7 +32,7 @@ writeLog "--------------------------------"
 writeLog "output_file: $haVMSettingsCsvFile"
 writeLog "--------------------------------"
 $haVMSettings = $ha_cluseter_config.Configuration.DasConfig.DefaultVmSettings
-$haVMSettings
+$haVMSettings | fl
 $haVMSettings | Export-Csv -Path $haVMSettingsCsvFile
 
 $haVMSettingsMonitorCsvFile = $csvDir + "\" + $vc.Name + "_" + $ha_datacenter  + "_" + $ha_cluster + "_ha_vmsettings_monitor.csv"
@@ -40,7 +40,7 @@ writeLog "--------------------------------"
 writeLog "output_file: $haVMSettingsMonitorCsvFile"
 writeLog "--------------------------------"
 $haVMSettingsMonitor = $ha_cluseter_config.Configuration.DasConfig.DefaultVmSettings.VmToolsMonitoringSettings
-$haVMSettingsMonitor
+$haVMSettingsMonitor | fl
 $haVMSettingsMonitor | Export-Csv -Path $haVMSettingsMonitorCsvFile
 
 $haVMSettingsProtectionCsvFile = $csvDir + "\" + $vc.Name + "_" + $ha_datacenter  + "_" + $ha_cluster + "_ha_vmsettings_protection.csv"
@@ -48,7 +48,7 @@ writeLog "--------------------------------"
 writeLog "output_file: $haVMSettingsProtectionCsvFile"
 writeLog "--------------------------------"
 $haVMSettingsProtection = $ha_cluseter_config.Configuration.DasConfig.DefaultVmSettings.VmComponentProtectionSettings
-$haVMSettingsProtection
+$haVMSettingsProtection | fl
 $haVMSettingsProtection | Export-Csv -Path $haVMSettingsProtectionCsvFile
 
 # ハートビートデータストア設定
@@ -57,7 +57,7 @@ writeLog "--------------------------------"
 writeLog "output_file: $haHeartbeatDatastoreCsvFile"
 writeLog "--------------------------------"
 $haHeartbeatDatastore = $ha_cluseter_config.Configuration.DasConfig.HBDatastoreCandidatePolicy
-$haHeartbeatDatastore
+$haHeartbeatDatastore | fl
 $haHeartbeatDatastore | Export-Csv -Path $haHeartbeatDatastoreCsvFile
 
 # 詳細オプション
@@ -66,7 +66,7 @@ writeLog "--------------------------------"
 writeLog "output_file: $haOptionCsvFile"
 writeLog "--------------------------------"
 $haOption = $ha_cluseter_config.Configuration.DasConfig.option
-$haOption
+$haOption | fl
 $haOption | Export-Csv -Path $haOptionCsvFile
 
 
